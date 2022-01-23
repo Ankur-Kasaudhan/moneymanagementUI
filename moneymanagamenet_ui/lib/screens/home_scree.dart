@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moneymanagamenet_ui/constants/color_constant.dart';
 import 'package:moneymanagamenet_ui/models/card_model.dart';
+import 'package:moneymanagamenet_ui/models/operation_model.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -14,6 +15,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int current = 0;
+
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,10 +137,86 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 27,
                             ),
                           ),
+                          Positioned(
+                            left: 29,
+                            bottom: 45,
+                            child: Text(
+                              'TEXT HOLDERNAME',
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: kWhiteColor),
+                            ),
+                          ),
+                          Positioned(
+                            left: 29,
+                            bottom: 21,
+                            child: Text(
+                              cards[index].user,
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: kWhiteColor),
+                            ),
+                          ),
+                          Positioned(
+                            left: 202,
+                            bottom: 45,
+                            child: Text(
+                              'EXPIRY DATE',
+                              style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: kWhiteColor),
+                            ),
+                          ),
+                          Positioned(
+                            left: 202,
+                            bottom: 21,
+                            child: Text(
+                              cards[index].cardExpired,
+                              style: GoogleFonts.inter(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: kWhiteColor),
+                            ),
+                          ),
                         ],
                       ),
                     );
                   }),
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.only(left: 16, bottom: 13, top: 29, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Operations',
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: kBlackColor,
+                    ),
+                  ),
+                  Row(
+                    children: map<Widget>(datas, (index, selected) {
+                      return Container(
+                        alignment: Alignment.centerLeft,
+                        height: 9,
+                        width: 9,
+                        margin: EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              current == index ? kBlueColor : kTwentyBlueColor,
+                        ),
+                      );
+                    }),
+                  )
+                ],
+              ),
             )
           ],
         ),

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, avoid_print, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, avoid_print, sized_box_for_whitespace, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -201,25 +201,111 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Row(
-                    children: map<Widget>(datas, (index, selected) {
-                      return Container(
-                        alignment: Alignment.centerLeft,
-                        height: 9,
-                        width: 9,
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              current == index ? kBlueColor : kTwentyBlueColor,
-                        ),
-                      );
-                    }),
-                  )
+                    children: map<Widget>(
+                      datas,
+                      (index, selected) {
+                        return Container(
+                          alignment: Alignment.centerLeft,
+                          height: 9,
+                          width: 9,
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: current == index
+                                ? kBlueColor
+                                : kTwentyBlueColor,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
+            ),
+            Container(
+              height: 123,
+              child: ListView.builder(
+                  itemCount: datas.length,
+                  padding: EdgeInsets.only(left: 16),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        current = index;
+                      },
+                      child: OpearationCard(
+                          operation: datas[index].name,
+                          selectedIcon: datas[index].selectedIcon,
+                          unselectedIcon: datas[index].unselectedIcon,
+                          isSelected: current == index,
+                          context: this),
+                    );
+                  }),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class OpearationCard extends StatefulWidget {
+  final String operation;
+  final String selectedIcon;
+  final String unselectedIcon;
+  final bool isSelected;
+  _HomeScreenState context;
+
+  OpearationCard(
+      {Key key,
+      this.operation,
+      this.selectedIcon,
+      this.unselectedIcon,
+      this.isSelected,
+      this.context});
+
+  @override
+  State<OpearationCard> createState() => _OpearationCardState();
+}
+
+class _OpearationCardState extends State<OpearationCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 16),
+      width: 243,
+      height: 153,
+      decoration: BoxDecoration(
+        // ignore: prefer_const_literals_to_create_immutables
+        boxShadow: [
+          BoxShadow(
+            color: kTenBlackColor,
+            blurRadius: 10,
+            spreadRadius: 5,
+            offset: Offset(8.0, 8.0),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(15),
+        color: widget.isSelected ? kBlueColor : kWhiteColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+              widget.isSelected ? widget.selectedIcon : widget.unselectedIcon),
+          SizedBox(
+            height: 9,
+          ),
+          Text(
+            widget.operation,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: widget.isSelected ? kWhiteColor : kBlueColor),
+          ),
+        ],
       ),
     );
   }
